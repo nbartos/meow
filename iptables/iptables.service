@@ -1,0 +1,15 @@
+[Unit]
+Description=iptables
+Before=network-pre.target network.target ssh.service
+DefaultDependencies=no
+
+[Service]
+EnvironmentFile=/etc/default/iptables
+SyslogIdentifier=iptables
+ExecStartPre=/bin/sh -c '/usr/local/bin/iptables-ipsets.py --init && /sbin/iptables-restore < /etc/iptables.rules && /sbin/ip6tables-restore < /etc/ip6tables.rules'
+ExecStart=/usr/local/bin/iptables-ipsets.py $IPTABLES_IPSETS_ARGS
+Restart=always
+
+[Install]
+WantedBy=network-pre.target
+WantedBy=network.target
