@@ -10,7 +10,7 @@ import time
 
 from dns import exception
 import dns.resolver
-from dns.resolver import NXDOMAIN
+from dns.resolver import NoAnswer, NXDOMAIN
 
 LOG = logging.getLogger()
 
@@ -30,7 +30,7 @@ class Query:
     def get_ips(self, name, timeout=3):
         try:
             ans = self.resolver.query(name, lifetime=timeout)
-        except NXDOMAIN:
+        except (NXDOMAIN, NoAnswer):
             return []
         except exception.Timeout:
             LOG.error('Timeout resolving: %s', name)
