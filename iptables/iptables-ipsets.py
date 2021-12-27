@@ -98,7 +98,9 @@ def loop():
                 new_ipmap = {}
                 for ip, last_seen in ipmap.items():
                     if last_seen < purge_before:
-                        LOG.info('Removing %s from ipset %s, it was last seen at %s.', ip, domain, last_seen)
+                        LOG.info(
+                            'Removing %s from ipset %s, it was last seen at %s.', ip, domain, last_seen.astimezone()
+                        )
                     else:
                         new_ipmap[ip] = last_seen
                 ipsets[domain] = new_ipmap
