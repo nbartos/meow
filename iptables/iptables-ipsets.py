@@ -81,6 +81,11 @@ def loop():
                     ipsets[match.group(1)] = {}
 
     while True:
+        # If we are using the contents of resolv.conf, make sure to update our copy. It's possible the contents of this
+        # file will change.
+        if not args.dns:
+            query = Query(args.resolv_conf, dns_servers=args.dns)
+
         if not args.init:
             now = datetime.datetime.utcnow()
             for domain in ipsets:
