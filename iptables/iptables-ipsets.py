@@ -80,6 +80,14 @@ def loop():
                 if match:
                     ipsets[match.group(1)] = {}
 
+    # If the iptables rules do not reference any domains, there is nothing for this script to do. In that case, just
+    # exit so we don't end up consuming any system resources unnecessarily.
+    if not ipsets:
+        # Only print this message once in the logs per run.
+        if not args.init:
+            LOG.info('No domain names referenced in the iptables rules, ipset update service quitting.')
+        return
+
     while True:
         # If we are using the contents of resolv.conf, make sure to update our copy. It's possible the contents of this
         # file will change.
